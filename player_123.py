@@ -30,15 +30,11 @@ class MMsolveur:
         if len(self.possibility) != 32768:
             if quel_essai == 1:
                 essai_x = self.choisir_essai_placem()
-            elif quel_essai == 2:
-                essai_x = self.choisir_essai_coule()
-            elif quel_essai == 3:
-                essai_x = self.choisir_essai_placem_inv()
             else:
                 essai_x = self.possibility[0]
         else:
-            essai_1 = []
-            for i in range(self.length):
+            essai_1 = [self.choice[0]]
+            for i in range(self.length-1):
                 essai_1 += [self.choice[i],]
             essai_x = essai_1
         reponse = self.to_solve.essai(essai_x)
@@ -57,36 +53,6 @@ class MMsolveur:
                 possibility.append(poss)
         self.possibility = possibility
 
-    def choisir_essai_coule(self):
-        """ Pondère selon les couleurs possibles"""
-        choix = []
-        valeur = {}
-        for poss in self.possibility:
-            for number in poss:
-                choix.append(number)
-
-        # Pondération des nombres
-        tot = 0
-        for poss in self.choice:
-            valeur[poss] = choix.count(poss)
-        for j in valeur.keys():
-            tot += valeur[j]
-        for j in valeur.keys():
-            valeur[j] = valeur[j] / tot
-
-
-        plus_poss = [(), 0]
-        for poss in self.possibility:
-            tot = 0
-            for i in range(self.length):
-                if poss[i] in valeur.keys():
-                    tot += valeur[poss[i]]
-            if tot > plus_poss[1]:
-                plus_poss = [poss, tot]
-        if plus_poss[0] == ():
-            Exception("Pas de valeur possible")
-            return None
-        return plus_poss[0]
 
     def choisir_essai_placem(self):
         """ Pondère selon le placement des pièces"""
@@ -131,48 +97,7 @@ class MMsolveur:
             return None
         return plus_poss[0]
 
-    def choisir_essai_placem_inv(self):
-        """ Pondère selon le placement des pièces inversement"""
 
-        # Créé des sources pour garder les biens placer
-        choix = {}
-        valeur = {}
-        for i in range(self.length):
-            choix[i] = []
-            valeur[i] = {}
-
-        # Ajouter les couleurs sur la ligne
-        for poss in self.possibility:
-            for i, color in enumerate(poss):
-                choix[i] += [color, ]
-
-        # Pondérée les valeurs
-        for i, listes in choix.items():
-            for poss in self.choice:
-                valeur[i][poss] = listes.count(poss)
-
-        for i in range(self.length):
-            tot = 0
-            for j in valeur[i].keys():
-                tot += valeur[i][j]
-            for j in valeur[i].keys():
-                valeur[i][j] = valeur[i][j] / tot
-
-        # Choisir le plus probable
-        plus_poss = [(), 40]
-        for poss in self.possibility:
-            tot = 0
-            for ligne in valeur.values():
-                for i in range(self.length):
-                    if poss[i] in ligne.keys():
-                        tot += ligne[poss[i]]
-
-            if tot < plus_poss[1]:
-                plus_poss = [poss, tot]
-        if plus_poss[0] == ():
-            Exception("Pas de valeur possible")
-            return None
-        return plus_poss[0]
 
 if __name__ == '__main__':
     la_reponse = [8, 8, 5, 7, 8]
