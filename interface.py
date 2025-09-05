@@ -6,6 +6,7 @@ class PlayMM:
         self.record = [20, 0]
 
     def play_mastermind(self):
+        """ Pour jour à MasterMind"""
         length = input("La longueur de la suite à trouver: ('5' pour 5): ")
         if length == '5':
             length = 5
@@ -62,3 +63,6 @@ class PlayMM:
 
 if __name__ == '__main__':
     PlayMM().repeat_solve()
+    play = input("Voulez-vous jouez ? (O/N): ")
+    if play == 'O':
+        PlayMM().play_mastermind()
