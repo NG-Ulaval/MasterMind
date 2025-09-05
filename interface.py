@@ -43,12 +43,14 @@ class PlayMM:
         choices = [1, 2, 3, 4, 5, 6, 7, 8]
         length = 5
         for j in [1, 2]:
-            for i in range(125):
+            for i in range(30):
                 answer = GR.MasterMind(random.choices(choices, k=length))
                 jeu = pl.MMsolveur(answer.reponse, choices, length)
-                jeu.solve(j)
+                reponse = jeu.solve(j)
+                print("La réponse était: ", reponse, "Nb d'essais: ", jeu.count)
                 data[j] += jeu.count
         print(data)
+
 
 
 
