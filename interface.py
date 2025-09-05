@@ -42,7 +42,7 @@ class PlayMM:
         data = {1:0,2:0,3:0, 4:0}
         choices = [1, 2, 3, 4, 5, 6, 7, 8]
         length = 5
-        for j in [1, 2, 3, 4]:
+        for j in [1, 2]:
             for i in range(125):
                 answer = GR.MasterMind(random.choices(choices, k=length))
                 jeu = pl.MMsolveur(answer.reponse, choices, length)
