@@ -3,7 +3,7 @@ import random
 import Game_rule as GR
 class PlayMM:
     def __init__(self):
-        record = 20
+        self.record = [20, 0]
 
     def play_mastermind(self):
         length = input("La longueur de la suite à trouver: ('5' pour 5): ")
@@ -39,6 +39,7 @@ class PlayMM:
                     answer = GR.MasterMind(random.choices(choices, k=length))
 
     def repeat_solve(self):
+        """ Résout joue 60 fois"""
         data = {1:0,2:0}
         choices = [1, 2, 3, 4, 5, 6, 7, 8]
         length = 5
@@ -47,9 +48,13 @@ class PlayMM:
                 answer = GR.MasterMind(random.choices(choices, k=length))
                 jeu = pl.MMsolveur(answer.reponse, choices, length)
                 reponse = jeu.solve(j)
-                print("La réponse était: ", reponse, "Nb d'essais: ", jeu.count)
+                # print("La réponse était: ", reponse, "Nb d'essais: ", jeu.count)
                 data[j] += jeu.count
-        print(data)
+                if jeu.count < self.record[0]:
+                    self.record = [jeu.count, j]
+        print("Approche 1: ", data[1], " tour jouer.")
+        print("Approche 2: ", data[2], " tour jouer.")
+        print(f"L'approche {self.record[1]} a eu le tour le plus bas avec {self.record[1]} tours.")
 
 
 
