@@ -48,7 +48,7 @@ class PlayMM:
                 answer = GR.MasterMind(random.choices(choices, k=length))
                 jeu = pl.MMsolveur(answer.reponse, choices, length)
                 reponse = jeu.solve(j)
-                # print("La réponse était: ", reponse, "Nb d'essais: ", jeu.count)
+                print("La réponse était: ", reponse, "Nb d'essais: ", jeu.count)
                 data[j] += jeu.count
                 if jeu.count < self.record[0]:
                     self.record = [jeu.count, j]
