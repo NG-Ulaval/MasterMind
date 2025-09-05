@@ -39,7 +39,7 @@ class PlayMM:
                     answer = GR.MasterMind(random.choices(choices, k=length))
 
     def repeat_solve(self):
-        data = {1:0,2:0,3:0, 4:0}
+        data = {1:0,2:0}
         choices = [1, 2, 3, 4, 5, 6, 7, 8]
         length = 5
         for j in [1, 2]:
