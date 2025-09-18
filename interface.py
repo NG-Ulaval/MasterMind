@@ -3,7 +3,7 @@ import random
 import Game_rule as GR
 class PlayMM:
     def __init__(self):
-        self.record = [20, 0]
+        self.record = [20, 0, 0, 0]
 
     def play_mastermind(self):
         """ Pour jour à MasterMind"""
@@ -52,10 +52,13 @@ class PlayMM:
                 print("La réponse était: ", reponse, "Nb d'essais: ", jeu.count)
                 data[j] += jeu.count
                 if jeu.count < self.record[0]:
-                    self.record = [jeu.count, j]
+                    self.record[0:1] = [jeu.count, j]
+                if jeu.count > self.record[2]:
+                    self.record[2:3] = [jeu.count, j]
         print("Approche 1: ", data[1], " tour jouer.")
         print("Approche 2: ", data[2], " tour jouer.")
-        print(f"L'approche {self.record[1]} a eu le tour le plus bas avec {self.record[1]} tours.")
+        print(f"L'approche {self.record[1]} a eu le nombre de tour le plus bas avec {self.record[1]} tours.")
+        print(f"L'approche {self.record[3]} a eu le nombre de tour le plus haut avec {self.record[2]} tours.")
 
 
 
@@ -63,6 +66,6 @@ class PlayMM:
 
 if __name__ == '__main__':
     PlayMM().repeat_solve()
-    play = input("Voulez-vous jouez ? (O/N): ")
+    play = input("Voulez-vous rejouez ? (O/N): ")
     if play == 'O':
         PlayMM().play_mastermind()
