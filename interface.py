@@ -1,9 +1,8 @@
 import player_123 as pl
 import random
 import Game_rule as GR
+
 class PlayMM:
-    def __init__(self):
-        self.record = [20, 0, 0, 0]
 
     def play_mastermind(self):
         """ Pour jour à MasterMind"""
@@ -17,8 +16,6 @@ class PlayMM:
         if choices == 'couleur':
             choices = ['bleu', 'jaune', 'vert', 'orange', 'noir', 'rouge', 'brun', 'rose']
         answer = GR.MasterMind(random.choices(choices, k=length))
-
-
 
         find = 'O'
         while find == 'O':
@@ -44,6 +41,7 @@ class PlayMM:
         data = {1:0,2:0}
         choices = [1, 2, 3, 4, 5, 6, 7, 8]
         length = 5
+        record = [20, 0, 0, 0]
         for j in [1, 2]:
             for i in range(30):
                 answer = GR.MasterMind(random.choices(choices, k=length))
@@ -51,22 +49,18 @@ class PlayMM:
                 reponse = jeu.solve(j)
                 print("La réponse était: ", reponse, "Nb d'essais: ", jeu.count)
                 data[j] += jeu.count
-                if jeu.count < self.record[0]:
-                    self.record[0:1] = [jeu.count, j]
-                if jeu.count > self.record[2]:
-                    self.record[2:3] = [jeu.count, j]
+                if jeu.count < record[0]:
+                    record[0:1] = [jeu.count, j]
+                if jeu.count > record[2]:
+                    record[2:3] = [jeu.count, j]
 
         # Présentation finale
         print("\n----------------------------------")
         print("Approche 1: ", data[1], " tours jouer.")
         print("Approche 2: ", data[2], " tours jouer.")
-        print(f"L'approche {self.record[1]} a eu le nombre de tour le plus bas avec {self.record[1]} tours.")
-        print(f"L'approche {self.record[3]} a eu le nombre de tour le plus haut avec {self.record[2]} tours.")
+        print(f"L'approche {record[1]} a eu le nombre de tour le plus bas avec {record[0]} tours.")
+        print(f"L'approche {record[3]} a eu le nombre de tour le plus haut avec {record[2]} tours.")
         print("----------------------------------\n")
-
-
-
-
 
 if __name__ == '__main__':
     PlayMM().repeat_solve()
