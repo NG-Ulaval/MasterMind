@@ -55,10 +55,14 @@ class PlayMM:
                     self.record[0:1] = [jeu.count, j]
                 if jeu.count > self.record[2]:
                     self.record[2:3] = [jeu.count, j]
-        print("Approche 1: ", data[1], " tour jouer.")
-        print("Approche 2: ", data[2], " tour jouer.")
+
+        # Présentation finale
+        print("\n----------------------------------")
+        print("Approche 1: ", data[1], " tours jouer.")
+        print("Approche 2: ", data[2], " tours jouer.")
         print(f"L'approche {self.record[1]} a eu le nombre de tour le plus bas avec {self.record[1]} tours.")
         print(f"L'approche {self.record[3]} a eu le nombre de tour le plus haut avec {self.record[2]} tours.")
+        print("----------------------------------\n")
 
 
 
