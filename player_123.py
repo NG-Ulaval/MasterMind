@@ -5,7 +5,7 @@ Maintaineur: Noah Garant
 """
 from itertools import product
 import Game_rule as GM
-
+import random
 
 class MMsolveur:
     def __init__(self, to_solve, choice, length = 5):
@@ -30,13 +30,16 @@ class MMsolveur:
         if len(self.possibility) != 32768:
             if quel_essai == 1:
                 essai_x = self.choisir_essai_placem()
+            elif quel_essai == 2:
+                essai_x = self.choisir_essai_alea()
             else:
                 essai_x = self.possibility[0]
         else:
-            essai_1 = [self.choice[0]]
-            for i in range(self.length-1):
+            essai_1 = []
+            for i in range(self.length):
                 essai_1 += [self.choice[i],]
             essai_x = essai_1
+        # print(essai_x)
         reponse = self.to_solve.essai(essai_x)
         self.tri_possible(essai_x, reponse)
         self.count += 1
@@ -60,6 +63,76 @@ class MMsolveur:
         # Créé des sources pour garder les biens placer
         choix = {}
         valeur = {}
+        valeur_moyenne = [0, []]
+        for i in range(self.length):
+            choix[i] = []
+            valeur[i] = {}
+
+        # Ajouter les couleurs sur la ligne
+        for poss in self.possibility:
+            for i, color in enumerate(poss):
+                choix[i] += [color, ]
+
+        # Pondérée les valeurs
+        for i, listes in choix.items():
+            for poss in self.choice:
+                valeur[i][poss] = listes.count(poss)
+
+        for i in range(self.length):
+            tot = 0
+            for j in valeur[i].keys():
+                tot += valeur[i][j]
+            for j in valeur[i].keys():
+                valeur[i][j] = valeur[i][j] / tot
+                # valeur_moyenne[1] += [valeur[i][j],]
+                # valeur_moyenne[0] += 1
+
+        # Présentation des probs
+        # arrondi = {
+        #     k: {kk: round(vv, 3) for kk, vv in val.items() if round(vv, 3) != 0}
+        #     for k, val in valeur.items()
+        # }
+        # res = {}
+        # for i in arrondi.keys():
+        #     for j in arrondi[i].keys():
+        #
+        #         res[arrondi[i][j]] = []
+        # for i in arrondi.keys():
+        #     for j in arrondi[i].keys():
+        #
+        #         res[arrondi[i][j]] +=[(i, j),]
+        #
+        # print(res)
+        # valeur_moyenne = sum(valeur_moyenne[1])/valeur_moyenne[0]
+        # print(valeur_moyenne)
+        # Choisir le plus probable
+
+
+        plus_poss = [(), -100]
+        for poss in self.possibility:
+            tot = []
+            for ligne in valeur.values():
+                for i in range(self.length):
+                    if poss[i] in ligne.keys():
+                        if ligne[poss[i]] != 0:
+                            tot += [ligne[poss[i]],]
+            tot = sum(tot[0:2])/len(tot)
+
+            # print(tot, plus_poss[1])
+            if tot > plus_poss[1]:
+                plus_poss = [poss, tot]
+        if plus_poss[0] == ():
+            Exception("Pas de valeur possible")
+            return None
+        return plus_poss[0]
+
+    def choisir_essai_alea(self):
+        """ Pondère selon le placement des pièces"""
+
+        # Créé des sources pour garder les biens placer
+        choix = {}
+        valeur = {}
+        valeur_moyenne = [0, []]
         for i in range(self.length):
             choix[i] = []
             valeur[i] = {}
@@ -81,21 +154,19 @@ class MMsolveur:
             for j in valeur[i].keys():
                 valeur[i][j] = valeur[i][j] / tot
 
-        # Choisir le plus probable
-        plus_poss = [(), 0]
-        for poss in self.possibility:
-            tot = 0
-            for ligne in valeur.values():
-                for i in range(self.length):
-                    if poss[i] in ligne.keys():
-                        tot += ligne[poss[i]]
+        tirages = {
+            k: random.choices(list(sub.keys()), weights=list(sub.values()), k=1)[0]
+            for k, sub in valeur.items()
+        }
+        alea = []
+        for i in tirages.values():
+            alea += [i, ]
 
-            if tot > plus_poss[1]:
-                plus_poss = [poss, tot]
-        if plus_poss[0] == ():
-            Exception("Pas de valeur possible")
-            return None
-        return plus_poss[0]
+        return alea
+
+
+
+
 
 
 
@@ -104,7 +175,7 @@ if __name__ == '__main__':
     choices = [1, 2, 3, 4, 5, 6, 7, 8]
     jeu = MMsolveur(to_solve = la_reponse, choice = choices, length = 5)
     ## print(jeu.solve(quel_essai=1), "count:", jeu.count)
-    print(jeu.solve(quel_essai=2), "count:", jeu.count)
+    print(jeu.solve(quel_essai=1), "count:", jeu.count)
     ## print(jeu.solve(quel_essai=3), "count:", jeu.count)
     #### print(jeu.solve(quel_essai=4), "count:", jeu.count)
 

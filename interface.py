@@ -1,7 +1,7 @@
 import player_123 as pl
 import random
 import Game_rule as GR
-
+import time
 class PlayMM:
 
     def play_mastermind(self):
@@ -38,32 +38,50 @@ class PlayMM:
 
     def repeat_solve(self):
         """ Résout joue 60 fois"""
-        data = {1:0,2:0}
+        nb_essai = 3
+        essai = []
+        data = {}
+        record_bas = {}
+        record_haut = {}
+        time_count = {}
+        for i in range(nb_essai):
+            essai += [1 + i,]
+            data[i+1] = 0
+            record_bas[i+1] = [20, 0]
+            record_haut[i+1] = [0, 0]
+            time_count[i+1] = 0
+
+
         choices = [1, 2, 3, 4, 5, 6, 7, 8]
         length = 5
-        record = [20, 0, 0, 0]
-        for j in [1, 2]:
+
+
+        for j in essai:
+            time_count[j] = time.time()
             for i in range(30):
                 answer = GR.MasterMind(random.choices(choices, k=length))
                 jeu = pl.MMsolveur(answer.reponse, choices, length)
                 reponse = jeu.solve(j)
-                print("La réponse était: ", reponse, "Nb d'essais: ", jeu.count)
+                # print("La réponse était: ", reponse, "Nb d'essais: ", jeu.count)
                 data[j] += jeu.count
-                if jeu.count < record[0]:
-                    record[0:1] = [jeu.count, j]
-                if jeu.count > record[2]:
-                    record[2:3] = [jeu.count, j]
+                if jeu.count < record_bas[j][0]:
+                    record_bas[j] = [jeu.count, j]
+                if jeu.count > record_haut[j][0]:
+                    record_haut[j] = [jeu.count, j]
+            time_count[j] = round(time.time() - time_count[j], 1)
 
         # Présentation finale
-        print("\n----------------------------------")
-        print("Approche 1: ", data[1], " tours jouer.")
-        print("Approche 2: ", data[2], " tours jouer.")
-        print(f"L'approche {record[1]} a eu le nombre de tour le plus bas avec {record[0]} tours.")
-        print(f"L'approche {record[3]} a eu le nombre de tour le plus haut avec {record[2]} tours.")
-        print("----------------------------------\n")
 
+        print("\n----------------------------------")
+        for i in essai:
+            print(f"Approche {i} :\n {data[i]} tours jouer")
+            print(f" Max : {record_haut[i][0]}\n Min : {record_bas[i][0]}")
+            print(f" Time : {time_count[i]}\n")
+        # print(f"L'approche {record_bas[1]} a eu le nombre de tour le plus bas avec {record_bas[0]} tours.")
+        # print(f"L'approche {record_haut[1]} a eu le nombre de tour le plus haut avec {record_haut[0]} tours.")
+        print("----------------------------------\n")
 if __name__ == '__main__':
     PlayMM().repeat_solve()
-    play = input("Voulez-vous rejouez ? (O/N): ")
+    play = input("Voulez-vous jouez ? (O/N): ")
     if play == 'O':
         PlayMM().play_mastermind()
